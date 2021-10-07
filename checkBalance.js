@@ -15,7 +15,8 @@ async function printgetBinance(btcPrice){
     console.log( `BNB của bạn là : ${total.BNB}`);
 }
 async function checkGia(){
-    const priceUSDT = await binnace.fetchOHLCV('MATIC/USDT', '1d', undefined, 30);
+    var sys = 'ADA/USDT'
+    const priceUSDT = await binnace.fetchOHLCV(sys, '1d', undefined, 30);
     const priceOJECT = priceUSDT.map(price => {
         return {
             timestamp: moment(price[0]).format(),
@@ -27,16 +28,12 @@ async function checkGia(){
     })
 
     const GIATB30NGAYGANNHAT = priceOJECT.reduce((acc, price) => acc + price.close,0)/30;
-
-    
     // giá hiện tại
     const lastPrice = priceOJECT[priceOJECT.length-1].close
    // console.log(priceOJECT);
-    console.log(`GIÁ TRUNG BÌNH 30 NGÀY  Ở BINANCE LÀ ${GIATB30NGAYGANNHAT}`);
-    console.log(`GIÁ  HIỆN TẠI Ở BINANCE LÀ  ${lastPrice}`);
-    
+    console.log(`GIÁ TRUNG BÌNH 30 NGÀY CỦA ${sys} Ở BINANCE LÀ ${GIATB30NGAYGANNHAT}`);
+    console.log(`GIÁ  HIỆN TẠI CỦA  ${sys} Ở BINANCE LÀ  ${lastPrice}`);
 }
-
 const SAN =  new ccxt.huobi();
 async function checkGiaSan(){
     var sys = 'ADA/USDT'
@@ -58,7 +55,6 @@ async function checkGiaSan(){
     console.log(`GIÁ HIỆN TẠI  ${lastPrice}`)
 
 }
-
-//printgetBinance();
-//checkGia();
+printgetBinance();
+checkGia();
 checkGiaSan();
