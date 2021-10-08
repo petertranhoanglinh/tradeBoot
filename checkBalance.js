@@ -36,7 +36,7 @@ async function checkGia(){
 }
 const SAN =  new ccxt.huobi();
 async function checkGiaSan(){
-    var sys = 'ADA/USDT'
+    var sys = 'HT/USDT'
     const priceUSDT = await SAN.fetchOHLCV( sys, '1d', undefined, 30);
     const priceOBJECT = priceUSDT.map(price => {
         return {
@@ -52,9 +52,8 @@ async function checkGiaSan(){
     const lastPrice = priceOBJECT[priceOBJECT.length-1].close
     //console.log(priceOBJECT);
     console.log(`GIÁ TRUNG BÌNH 30 NGÀY CỦA ${sys} LÀ : ${GIATTB}`);
-    console.log(`GIÁ HIỆN TẠI  ${lastPrice}`)
-
+    console.log(`GIÁ HIỆN TẠI CỦA ${sys} LÀ ${lastPrice}`)
 }
-printgetBinance();
-checkGia();
+//printgetBinance();
+//checkGia();
 checkGiaSan();
