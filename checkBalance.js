@@ -1,11 +1,15 @@
 
 const ccxt = require('ccxt');
 require('dotenv').config();
+const delay =  require('delay');
 const moment = require('moment');
+
 const binnace = new ccxt.binance({
     apiKey: process.env.APIKEY,
     secret: process.env.SECRETKEY,
 });
+binnace.setSandboxMode(true);
+var count = 0;
 
 async function printgetBinance(btcPrice){
     // goi thong tin tai khoan
@@ -14,12 +18,13 @@ async function printgetBinance(btcPrice){
     console.log( `USDT của bạn là : ${total.USDT}`);
     console.log( `BNB của bạn là : ${total.BNB}`);
 }
+
 // lấy thông tin sàn giao dịch
-const SAN =  new ccxt.gateio();
+const SAN =  new ccxt.huobi();
 async function checkGiaSan(){
-    var day = 12;
-    var sys = 'KONO/USDT'
-    const priceUSDT = await SAN.fetchOHLCV( sys, '1M', undefined,day);
+    var heso = 60;
+    var sys = 'HT/USDT'
+    const priceUSDT = await SAN.fetchOHLCV( sys, '1m', undefined,heso);
     const priceOBJECT = priceUSDT.map(price => {
         return {
             timestamp: moment(price[0]).format(),
@@ -29,13 +34,43 @@ async function checkGiaSan(){
             close: price[4],
             volume:price[5]      }
     })
-  
-    const GIATTB = priceOBJECT.reduce((acc, price) => acc + price.close,0)/day;
+
+   
+    const GIATTB = priceOBJECT.reduce((acc, price) => acc + price.close,0)/heso;
     const lastPrice = priceOBJECT[priceOBJECT.length-1].close
-    //console.log(priceOBJECT);
+    const lastOld = priceOBJECT[priceOBJECT.length-2].close
     console.log(`GIÁ TRUNG BÌNH  CỦA ${sys} LÀ : ${GIATTB}`);
     console.log(`GIÁ HIỆN TẠI CỦA ${sys} LÀ ${lastPrice}`)
+    
+    if(lastPrice<lastOld){
+        var giam = lastOld - lastPrice;
+        console.log(`gia ${sys} đang giảm ${giam}`)
+        count = count - 1;
+    }else{
+        var tang = lastPrice - lastOld;
+        console.log(`gia ${sys} đang tăng ${tang}`)
+        count = count + 1;
+    }
+    if(count == 5 && lastPrice <= GIATTB * 0.85){
+      console.log(`nên mua ${sys}`)
+    }
+    else if(count == -5 && lastPrice >= GIATTB * 1.15){
+        console.log(`nên bán ${sys}`)
+    }
+    if(count<=0){
+        console.log(`giá giảm ${count}`)
+    }else{
+        console.log(`giá tăng ${count}`)
+    }
+
+
 }
-//printgetBinance();
+async function main(){
+    while (true){
+        checkGiaSan();
+        await delay(60  * 1000);
+    }
+}
+printgetBinance();
 //checkGia();
-checkGiaSan();
+main();

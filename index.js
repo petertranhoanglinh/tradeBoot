@@ -3,8 +3,8 @@ const ccxt = require('ccxt');
 const delay =  require('delay');
 const moment = require('moment');
 const binnace = new ccxt.binance({
-    apiKey:'oM9GoHR4BLUijAV3rfKndL2QCLRd06deGtwLrsGERtlnZ9QlvecuBGGC0vWbu6Xa',
-    secret:'190f8XjkqduQVULo8rdmoJOzzOiZQqJiQs403zY3xNLbfEQKn0avGokjzXP23rd0',
+    apiKey: process.env.APIKEY,
+    secret: process.env.SECRETKEY,
 });
 // check tk giả
 binnace.setSandboxMode(true);
