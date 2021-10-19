@@ -22,9 +22,9 @@ async function printgetBinance(btcPrice){
 // lấy thông tin sàn giao dịch
 const SAN =  new ccxt.huobi();
 async function checkGiaSan(){
-    var heso = 60;
+    var heso = 12;
     var sys = 'HT/USDT'
-    const priceUSDT = await SAN.fetchOHLCV( sys, '1m', undefined,heso);
+    const priceUSDT = await SAN.fetchOHLCV( sys, '1M', undefined,heso);
     const priceOBJECT = priceUSDT.map(price => {
         return {
             timestamp: moment(price[0]).format(),
@@ -38,7 +38,8 @@ async function checkGiaSan(){
    
     const GIATTB = priceOBJECT.reduce((acc, price) => acc + price.close,0)/heso;
     const lastPrice = priceOBJECT[priceOBJECT.length-1].close
-    const lastOld = priceOBJECT[priceOBJECT.length-2].close
+    const lastOld = priceOBJECT[priceOBJECT.length-3].close
+    console.log(priceOBJECT);
     console.log(`GIÁ TRUNG BÌNH  CỦA ${sys} LÀ : ${GIATTB}`);
     console.log(`GIÁ HIỆN TẠI CỦA ${sys} LÀ ${lastPrice}`)
     
@@ -71,6 +72,6 @@ async function main(){
         await delay(60  * 1000);
     }
 }
-printgetBinance();
+//printgetBinance();
 //checkGia();
 main();
