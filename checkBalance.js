@@ -23,7 +23,7 @@ async function printgetBinance(btcPrice){
 const SAN =  new ccxt.huobi();
 async function checkGiaSan(){
     var heso = 12;
-    var sys = 'HT/USDT'
+    var sys = 'SBR/USDT'
     const priceUSDT = await SAN.fetchOHLCV( sys, '1M', undefined,heso);
     const priceOBJECT = priceUSDT.map(price => {
         return {
